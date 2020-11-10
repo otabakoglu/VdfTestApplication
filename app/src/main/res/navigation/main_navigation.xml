@@ -6,16 +6,24 @@
     app:startDestination="@id/viewPager2Fragment">
 
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.vdf.testapplication.ui.main.MainFragment"
-        android:label="main_fragment"
-        tools:layout="@layout/main_fragment" />
-    <fragment
         android:id="@+id/viewPager2Fragment"
         android:name="com.vdf.testapplication.ui.viewpager2.ViewPager2Fragment"
         android:label="ViewPager2Fragment" >
         <action
-            android:id="@+id/action_viewPager2Fragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_viewPager2Fragment_to_pageFragment"
+            app:destination="@id/pageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pageFragment"
+        android:name="com.vdf.testapplication.ui.viewpager2.PageFragment"
+        android:label="PageFragment" />
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.vdf.testapplication.ui.main.MainFragment"
+        android:label="main_fragment"
+        tools:layout="@layout/main_fragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_viewPager2Fragment"
+            app:destination="@id/viewPager2Fragment" />
     </fragment>
 </navigation>

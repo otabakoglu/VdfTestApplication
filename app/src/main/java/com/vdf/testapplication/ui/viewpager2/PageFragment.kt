@@ -7,7 +7,7 @@ import com.vdf.testapplication.R
 import com.vdf.testapplication.databinding.FragmentRecyclerviewBinding
 
 class PageFragment(
-    private val data: List<String>? = emptyList()
+    var data: List<String>? =  List(2){"xxxxxxx$it"}
 ) :
     Fragment(R.layout.fragment_recyclerview) {
 
@@ -17,18 +17,21 @@ class PageFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = RecyclerViewAdapter(data)
+        adapter = RecyclerViewAdapter()
+        adapter.submitList(data)
 
         viewBinding = FragmentRecyclerviewBinding.bind(view)
         viewBinding.apply {
             textView.text = data?.size.toString()
             recyclerView.adapter = adapter
         }
+
     }
 
-    override fun onResume() {
-        super.onResume()
+    fun refresh(mData: List<String>?){
+        adapter.submitList(mData)
         adapter.notifyDataSetChanged()
     }
+
 
 }

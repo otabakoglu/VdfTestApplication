@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
 import androidx.viewpager2.widget.ViewPager2
 import com.vdf.testapplication.R
 import com.vdf.testapplication.databinding.FragmentViewpager2Binding
 import java.util.*
-import kotlin.collections.LinkedHashMap
 
 typealias StringList = List<String>
 
@@ -27,19 +28,30 @@ class ViewPager2Fragment : Fragment(R.layout.fragment_viewpager2) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = PagerAdapter(requireActivity())
+        adapter = PagerAdapter(childFragmentManager, object : Lifecycle(){
+            override fun addObserver(observer: LifecycleObserver) {
+            }
+
+            override fun removeObserver(observer: LifecycleObserver) {
+            }
+
+            override fun getCurrentState(): State {
+                return State.CREATED
+            }
+        })
         adapter.data = data
         adapter.titles = titles
 
         viewBinding = FragmentViewpager2Binding.bind(view)
 
         viewBinding.apply {
-            viewPager2.offscreenPageLimit = 1
             viewPager2.adapter = adapter
             viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     Log.i("onPageSelected", position.toString())
+
+                    //adapter.refresh(data["page 0"])
                 }
             })
 
@@ -60,14 +72,8 @@ class ViewPager2Fragment : Fragment(R.layout.fragment_viewpager2) {
     }
 
     private fun changePage() {
-
-        data[titles.last()] = List(Random().nextInt(6) + 4){"list item $it"}
-        adapter.data = data
-
-        titles = data.keys.toList()
-        adapter.titles = titles
-        adapter.notifyDataSetChanged()
-
+        val x = List(Random().nextInt(6) + 4){"list item $it"}
+        (viewBinding.viewPager2.findCurrentFragment(childFragmentManager) as? PageFragment)?.refresh(x)
     }
 
     private fun addPage(){

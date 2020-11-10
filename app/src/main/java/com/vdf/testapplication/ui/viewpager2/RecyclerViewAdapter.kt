@@ -7,12 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class RecyclerViewAdapter(
-    private val data: List<String>? = emptyList()
-) :
+class RecyclerViewAdapter :
     ListAdapter<String, RecyclerViewAdapter.ViewHolder>(DiffCallBack){
 
-    override fun getItemCount(): Int = data?.size ?: 0
+    override fun getItemCount(): Int = currentList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(
@@ -20,13 +18,13 @@ class RecyclerViewAdapter(
         )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        (holder.itemView as TextView).text = data?.get(position)
+        (holder.itemView as TextView).text = currentList[position]
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
     private object DiffCallBack: DiffUtil.ItemCallback<String>() {
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean = oldItem === newItem
+        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean = oldItem == newItem
         override fun areContentsTheSame(oldItem: String, newItem: String): Boolean = oldItem == newItem
     }
 }
